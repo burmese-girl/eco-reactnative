@@ -27,15 +27,12 @@ const ProductItem = ({item}: ProductItemProps) => {
 
   // push data to reducers
   const addProducts=()=>{
-
     dispatch(addProduct(item));
-
   };
-
   
   const onPress = () => {
-    // navigation.navigate('ProductDetails', {id: item.id});
-    console.log("Product Details Screen");
+    navigation.navigate('ProductDetails', {id: item.id});
+    
   };
 
   return (
@@ -72,7 +69,5 @@ const ProductItem = ({item}: ProductItemProps) => {
     
   );
 };
-
-
 
 export default ProductItem;

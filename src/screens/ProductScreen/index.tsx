@@ -1,109 +1,76 @@
-// import React, {useState, useEffect} from 'react';
-// import { Text, ScrollView, } from 'react-native';
-// import Picker from '@react-native-picker/picker'
-// import  {useRoute, useNavigation } from '@react-navigation/native'
-// // importreact-native link react-native-ionicons { DataStore, Auth } from 'aws-amplify';
-// import { Product, CartProduct } from '../../models';
+import React from 'react'
+import {Text, View, Button, Image} from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import products from '../../data/products';
+import styles from './styles';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import QuantitySelector from '../../components/QuantitySelector';
+import { useDispatch } from 'react-redux';
+import { addProduct } from '../../store/reducers/main';
 
-// import styles from './styles';
-// import QuantitySelector from '../../components/QuantitySelector';
-// import Button from '../../components/Button';
-// import ImageCarousel from '../../components/ImageCarousel';
+const ProductScreen= () => {
+    const route=useRoute();
+    const dispatch = useDispatch();
+    const selectedItem = products.find(obj => {
+        return obj.id === route?.params?.id;
+      });
 
+    const imageUrl= selectedItem?.image;
 
-// funcMango: Local Organic Product that can make you healthy.
+    const addProducts=()=>{
+        dispatch(addProduct(selectedItem));
+      };     
 
-//     const [product, setProduct] = useState<Product | undefined>(undefined);
+    const updateQty = ()=> {
+        console.log('qtyUpdate Here!!');
+    }
 
-//     const [selectedOption, setSelectedOption] = useState<string | undefined>(
-//       undefined,
-//     );
-//     const [quantity, setQuantity] = useState(1);
-  
-//     const navigation = useNavigation();
-//     const route = useRoute();
-  
-//     useEffect(() => {
-//       if (!route.params?.id) {
-//         return;
-//       }
-//       DataStore.query(Product, route.params.id).then(setProduct);
-//     }, [route.params?.id]);
-  
-//     useEffect(() => {
-//       if (product?.options) {
-//         setSelectedOption(product.options[0]);
-//       }
-//     }, [product]);
-  
-//     const onAddToCart = async () => {
-//       const userData = await Auth.currentAuthenticatedUser();
-  
-//       if (!product || !userData) {
-//         return;
-//       }
-  
-//       const newCartProduct = new CartProduct({
-//         userSub: userData.attributes.sub,
-//         quantity,
-//         option: selectedOption,
-//         productID: product.id,
-//       });
-  
-//       await DataStore.save(newCartProduct);
-//       navigation.navigate('shoppingCart');
-//     };
-  
-//     if (!product) {
-//       return <ActivityIndicator />;
-//     }
-  
-//     return (
-//       <ScrollView style={styles.root}>
-//         <Text style={styles.title}>{product.title}</Text>
-  
-//         {/* Image carousel */}
-//         <ImageCarousel images={product.images} />
-  
-//         {/* Option selector */}
-//         <Picker
-//           selectedValue={selectedOption}
-//           onValueChange={itemValue => setSelectedOption(itemValue)}>
-//           {product.options.map(option => (
-//             <Picker.Item label={option} value={option} />
-//           ))}
-//         </Picker>
-  
-//         {/* Price */}
-//         <Text style={styles.price}>
-//           from ${product.price.toFixed(2)}
-//           {product.oldPrice && (
-//             <Text style={styles.oldPrice}> ${product.oldPrice.toFixed(2)}</Text>
-//           )}
-//         </Text>
-  
-//         {/* Description */}
-//         <Text style={styles.description}>{product.description}</Text>
-  
-//         {/* Qunatiti selector */}
-//         <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
-  
-//         {/* Button */}
-//         <Button
-//           text={'Add To Cart'}
-//           onPress={onAddToCart}
-//           containerStyles={{backgroundColor: '#e3c905'}}
-//         />
-//         <Button
-//           text={'Buy Now'}
-//           onPress={() => {
-//             console.warn('Buy now');
-//           }}
-//         />
-//       </ScrollView>
-//     );
-//   };
+    // console.log("... selectedItem in Details ::: ", selectedItem.image);
+    // console.log("... item in Details ::: ", typeof(products));
+    // console.log("........ Product ID in PDetails ::: ",route.params.id);
 
+  return (
+    
+    <View style={styles.root}>
+        <View style={styles.row}>
+        <Image style={styles.image} source={{ uri:imageUrl}}></Image>       
+       </View>
+        <View style={styles.quantityContainer}>
+            <QuantitySelector 
+            quantity={selectedItem?.quantity}
+            type={'increase'}
+            setQuantity={updateQty}
+            /> 
+        </View>  
+      
+      <View > 
+            <Text style={styles.title} numberOfLines={3} > {selectedItem?.title} </Text>
+            
+            <View style={styles.ratingsContainer}>
+            {[0, 0, 0, 0, 0].map((el, i) => (
+              <FontAwesome
+                key={`${selectedItem.id}-${i}`}
+                style={styles.star}
+                name={i < Math.floor(selectedItem?.avgRating) ? 'star' : 'star-o'}
+                size={18}
+                color={'#C364C5'}
+              />
+            ))}
+            <Text>{selectedItem?.ratings}</Text>
+          </View>
+         
+        <Text style={styles.price} >Price: {selectedItem?.price}</Text>
+         
 
+            
+        </View>      
 
-// export default ProductScreen;
+        <View style={styles.buttonStyle}>  
+            <Button title='add Cart' onPress={addProducts} color={'#C364C5'}></Button>
+        </View>         
+
+      </View>
+  )
+}
+
+export default ProductScreen
