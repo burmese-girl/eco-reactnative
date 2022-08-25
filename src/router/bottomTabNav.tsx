@@ -9,6 +9,7 @@ import ShoppingCartStack from './ShoppingCartStack'
 
 import shopingCartScreen from '../components/ProductList'
 import ShopingCartStack from './ShoppingCartStack';
+import UserStack from './UserStack' ;
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +40,7 @@ const BottomTabNav = () => {
 
       <Tab.Screen
         name="accountInformation"
-        component={HomeScreen}
+        component={UserStack}
         options={{
           tabBarIcon: ({color}) => (
             <FontAwesome name="user" color={color} size={25} />
