@@ -1,18 +1,40 @@
 import React from 'react'
-import {Text, TextInput, Button, View, StyleSheet} from 'react-native'
+import {Text, TextInput, Button, View, StyleSheet,Image} from 'react-native'
+import {RadioButton} from 'react-native-paper';
+
+const staticImage = require("../../assets/favicon.png");
+
 
 const UserSignupScreen = () => {
-  return (
-     <View style={{marginTop:10}}>
 
-        <Text style={styles.title}>Signup View</Text>
-        <TextInput style={styles.TextInput} testID='firstname' placeholder='Type your first name'></TextInput>
-         <TextInput style={styles.TextInput} testID='lastname' placeholder='Type your last name'></TextInput>
-        <TextInput style={styles.TextInput} testID='username' placeholder='Type your email'></TextInput>
-         <TextInput style={styles.TextInput} testID='password' placeholder='Type your password'></TextInput>
-         <TextInput style={styles.TextInput} testID='confrim_password' placeholder='Type your confrim password'></TextInput>
-         <TextInput style={styles.TextInput} testID='dob' placeholder='Type your Date of Birth'></TextInput>
-        <Button color='purple' style={styles.registerButton} title='SignUp'></Button>
+  const [value, setValue] = React.useState('male');
+  return (
+     <View style={{marginTop:0}}> 
+         <View style={{
+          width: 90,
+          height: 110,
+          aspectRatio: 1 * 3.8,
+          backgroundColor:'white'
+        }}>
+            
+            <Image   style={styles.image} source={staticImage} /> 
+        </View>
+     <View>
+        <TextInput style={styles.TextInput} testID='firstname' placeholder='First name'></TextInput>
+        <TextInput style={styles.TextInput} testID='lastname' placeholder='Last name'></TextInput>
+        <TextInput style={styles.TextInput} testID='username' placeholder='Email'></TextInput>
+        <TextInput style={styles.TextInput} testID='password' placeholder='Password'></TextInput>
+        <TextInput style={styles.TextInput} testID='confrim_password' placeholder='Confrim password'></TextInput>
+        <TextInput style={styles.TextInput} testID='dob' placeholder='Date of Birth'></TextInput>
+
+
+        <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
+        <RadioButton.Item label="Male" value="male" style={{backgroundColor:'white'}} />
+        <RadioButton.Item label="Female" value="female"  style={{backgroundColor:'white'}}/>
+        </RadioButton.Group>
+        <Button color='#862e9c' style={styles.registerButton} title='SignUp'></Button>
+    </View>       
+        
     </View>
   )
 }
@@ -29,16 +51,18 @@ const styles = StyleSheet.create({
         alignItems: 'center'
       },
     
-      TextInput:{
-        borderRadius: 0,
-        backgroundColor:'#fff',
-        color:'blue',
-        borderWidth:1,
-        fontSize:17,
-        textAlign:'center',
-        marginTop:4,
-        marginBottom:4,
-      },
+    TextInput:{
+    borderRadius: 0,
+    backgroundColor:'#fff',
+    color:'blue',
+    borderWidth:1,
+    fontSize:17,
+    textAlign:'center',
+    width:'100%',
+    padding:10,
+    margin:0,
+    borderColor: 'lightgray'
+  },
     
       title:{
         borderRadius: 0,
@@ -50,6 +74,14 @@ const styles = StyleSheet.create({
         textAlign:'center',
         paddingTop:10,
       },
+
+    image: {
+    flex: 1,
+    height:'100%',
+    width:'100%',
+    resizeMode: 'contain',
+    backgroundColor:'white',
+  },
     
 
 })
